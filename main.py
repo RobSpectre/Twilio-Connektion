@@ -51,6 +51,12 @@ class DefaultHandler(webapp.RequestHandler):
         query.filter('phone_number = ', phone_number).order('-date')
         return query.fetch(limit=500)
 
+    def handle_exception(self, e, debug):
+        logging.exception(e)
+        self.r.speak("Terribly sorry - we've encountered an error making " +
+                "your connection.  Please try again shortly.")
+        self.renderTwiML(self.r)
+
 class VoiceHandler(DefaultHandler):
     def post(self):
         # Establish call parameters
@@ -86,7 +92,7 @@ class ConnectUserHandler(DefaultHandler):
             user = choice(users)
             self.r.dial(user.From, callerId=phone_number)
         else:
-	        self.r.say("No connection can be found.  Expect a phone call from " +
+	        self.r.speak("No connection can be found.  Expect a phone call from " +
 			    "someone new soon.")
 
         self.renderTwiML(self.r)

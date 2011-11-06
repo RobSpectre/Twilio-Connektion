@@ -34,6 +34,7 @@ class Test_Function(unittest.TestCase):
         self.assertTrue('<Response>' in response, "Received instead: %s" % str(response))
         self.assertTrue('</Response>' in response, "Received instead: %s" % str(response))
         self.assertFalse('Error' in response, "Received instead: %s" % str(response))
+	self.assertFalse("Terribly sorry" in response, "Found error: %s" % str(response))
 
     def setupUsers(self, integer):
 	users = []
