@@ -56,7 +56,7 @@ http://example.appspot.com/voice
 
 TODO:
 
-* Unsubscribe
+* ~~Unsubscribe~~
 * Time zones / hour limitations
 * Tracking for who you've talked to
 * Banning
