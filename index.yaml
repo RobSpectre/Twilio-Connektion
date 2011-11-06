@@ -12,5 +12,11 @@ indexes:
 
 - kind: User
   properties:
+  - name: active
+  - name: phone_number
+  - name: From
+
+- kind: User
+  properties:
   - name: phone_number
   - name: From

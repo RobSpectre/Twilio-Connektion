@@ -100,7 +100,7 @@ class ReturningUser(Test_Function):
 class Unsubscribe(Test_Function):
     def test_unsubscribe(self):
 	users = self.setupUsers(1)
-	users[0]['NumDigits'] = "8"
+	users[0]['Digits'] = "8"
 	response = app.post("/unsubscribe", users[0])
 	self.assertTwiML(response)
         self.assertEqual(1, len(models.User().all().filter('active = ', 
@@ -108,8 +108,19 @@ class Unsubscribe(Test_Function):
 
     def test_unsubscribeIncorrectDigit(self):
 	users = self.setupUsers(1)
-	users[0]['NumDigits'] = "7"
+	users[0]['Digits'] = "7"
 	response = app.post("/unsubscribe", users[0])
 	self.assertTwiML(response)
 	self.assertEqual(1, len(models.User().all().filter('active = ',
 		True).fetch(2)))
+
+    def test_callInAfterUnsubscribe(self):
+	users = self.setupUsers(1)
+	users[0]['Digits'] = "8"
+	app.post("/unsubscribe", users[0])
+	response = app.post("/voice", users[0])
+	self.assertTwiML(response)
+	self.assertEqual(1, len(models.User().all().filter('active = ',
+		True).fetch(2)))
+	self.assertTrue("coming back" in response, "Did not find welcome" +
+		" back message in response. Instead found: %s" % str(response))

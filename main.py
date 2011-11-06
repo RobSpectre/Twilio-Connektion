@@ -14,6 +14,7 @@ from google.appengine.ext import db
 from twilio import twiml
 from random import choice
 import models
+import logging
 
 '''
 Controllers
@@ -68,13 +69,17 @@ class VoiceHandler(DefaultHandler):
         query.filter('phone_number = ', phone_number).filter('From = ', From)
         user = query.fetch(limit=1)
 
+        self.r.speak("Welcome to Mozilla Festival Connection.")
         if not user:
             self.r.redirect("/newuser")
         else:
-            user[0].active = True
-            self.r.speak("Welcome to Mozilla Festival Connection.")
-            self.r.speak("Please press 8 if you would like to unsubscribe.")
-            self.r.gather(action="/unsubscribe", numDigits="1")
+            if user[0].active:
+                self.r.speak("Please press 8 if you would like to unsubscribe.")
+                self.r.gather(action="/unsubscribe", numDigits="1")            
+            else:
+                user[0].active = True
+                user[0].put()
+                self.r.speak("Thanks for coming back. You are now reactivated.")
             self.r.redirect("/connect")
 
         self.renderTwiML(self.r)
@@ -87,7 +92,7 @@ class ConnectUserHandler(DefaultHandler):
 
         users_query = db.Query(models.User)
         users_query.filter('phone_number = ', phone_number).filter('From != ',
-			From)
+			From).filter('active =', True)
         users = users_query.fetch(limit=500)
 
         if users:
@@ -140,7 +145,7 @@ class UnsubscribeHandler(DefaultHandler):
 			From)
         users = users_query.fetch(limit=500)
 
-        if users and self.request.get("NumDigits") == "8":
+        if users and self.request.get("Digits") == "8":
             user = users.pop()
             user.active = False
             user.put()
