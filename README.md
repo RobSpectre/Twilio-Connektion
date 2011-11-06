@@ -63,6 +63,17 @@ TODO:
 * Multiple number support
 
 
+### Testing
+
+Twilio Connektion relies on [Nose](http://code.google.com/p/python-nose/) for
+testing.  Be sure to also install the [nose-gae
+plugin](http://pypi.python.org/pypi/NoseGAE/0.1.3).
+
+<pre>
+nosetests -v --with-gae
+</pre>
+
+
 ## Credits
 
 * Contributors: [Rob Spectre](http://www.brooklynhacker.com)
