@@ -71,6 +71,7 @@ class VoiceHandler(DefaultHandler):
         if not user:
             self.r.redirect("/newuser")
         else:
+            user[0].active = True
             self.r.speak("Welcome to Mozilla Festival Connection.")
             self.r.speak("Please press 8 if you would like to unsubscribe.")
             self.r.gather(action="/unsubscribe", numDigits="1")
