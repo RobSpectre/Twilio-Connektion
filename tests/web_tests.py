@@ -94,3 +94,22 @@ class ReturningUser(Test_Function):
                 "verb in response. Instead found: %s" % str(response))
         self.assertTrue("/connect" in response, "Did not find connect " +
                 "redirect in response. Instead found: %s" % str(response))
+	self.assertTrue("/unsubscribe" in response, "Did not find unsubscribe" +
+		" option in response.  Instead found: %s" % str(response))
+
+class Unsubscribe(Test_Function):
+    def test_unsubscribe(self):
+	users = self.setupUsers(1)
+	users[0]['NumDigits'] = "8"
+	response = app.post("/unsubscribe", users[0])
+	self.assertTwiML(response)
+        self.assertEqual(1, len(models.User().all().filter('active = ', 
+		False).fetch(2)))
+
+    def test_unsubscribeIncorrectDigit(self):
+	users = self.setupUsers(1)
+	users[0]['NumDigits'] = "7"
+	response = app.post("/unsubscribe", users[0])
+	self.assertTwiML(response)
+	self.assertEqual(1, len(models.User().all().filter('active = ',
+		True).fetch(2)))

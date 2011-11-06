@@ -71,8 +71,9 @@ class VoiceHandler(DefaultHandler):
         if not user:
             self.r.redirect("/newuser")
         else:
-            self.r.speak("Welcome to Mozilla Festival Connection - standby " + 
-                "while we connect you with someone new.")
+            self.r.speak("Welcome to Mozilla Festival Connection.")
+            self.r.speak("Please press 8 if you would like to unsubscribe.")
+            self.r.gather(action="/unsubscribe", numDigits="1")
             self.r.redirect("/connect")
 
         self.renderTwiML(self.r)
@@ -89,6 +90,8 @@ class ConnectUserHandler(DefaultHandler):
         users = users_query.fetch(limit=500)
 
         if users:
+            self.r.speak("Lovely - just one moment while we connect you with " +
+                    "someone new.")
             user = choice(users)
             self.r.dial(user.From, callerId=phone_number)
         else:
@@ -124,13 +127,35 @@ class RecordingHandler(DefaultHandler):
             " to someone new.")
         self.r.redirect("/connect")
         self.renderTwiML(self.r)
-                        
+
+class UnsubscribeHandler(DefaultHandler):
+    def post(self):
+        # Establish call parameters
+        phone_number = self.request.get("To")
+        From = self.request.get("From")
+
+        users_query = db.Query(models.User)
+        users_query.filter('phone_number = ', phone_number).filter('From = ',
+			From)
+        users = users_query.fetch(limit=500)
+
+        if users and self.request.get("NumDigits") == "8":
+            user = users.pop()
+            user.active = False
+            user.put()
+            self.r.speak("Thank you - you are now unsubscribed. Good day.")
+            self.r.hangup()
+        else:
+            self.r.speak("I'm sorry - did not understand that.")
+            self.r.redirect("/voice")
+        self.renderTwiML(self.r)
 
 application = webapp.WSGIApplication([('/', DefaultHandler),
                                       ('/voice', VoiceHandler),
                                       ('/connect', ConnectUserHandler),
                                       ('/recording', RecordingHandler),
-                                      ('/newuser', NewUserHandler)],
+                                      ('/newuser', NewUserHandler),
+                                      ('/unsubscribe', UnsubscribeHandler)],
                                      debug=True)
 def main():
     run_wsgi_app(application)
