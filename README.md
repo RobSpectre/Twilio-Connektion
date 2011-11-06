@@ -23,6 +23,44 @@ connection.
 * [Python](http://python.org)
 * [Google App Engine](http://appengine.google.com)
 * [Twilio](http://www.twilio.com)
+* You. :)
+
+
+## Usage
+
+If you're at [MozFest](https://mozillafestival.org/), call +44 20 3475 2916 to
+make a Connektion.
+
+
+## Hacking
+
+Accepting pull requests - if you're at MozFest, just seek out the guys with the
+[Twilio](http://www.twilio.com) lab coats.
+
+### Installation
+
+1) Install [Google App Engine for
+Python](http://code.google.com/appengine/docs/python/gettingstarted/).
+
+2) Clone repo
+
+<pre>
+git clone git@github.com:RobSpectre/Twilio-Connektion.git
+</pre>
+
+3) Use the following URL for your Voice Request URL for any Twilio phone number:
+
+<pre>
+http://example.appspot.com/voice
+</pre>
+
+TODO:
+
+* Unsubscribe
+* Time zones / hour limitations
+* Tracking for who you've talked to
+* Banning
+* Multiple number support
 
 
 ## Credits
