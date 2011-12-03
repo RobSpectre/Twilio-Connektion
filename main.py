@@ -73,7 +73,7 @@ class VoiceHandler(DefaultHandler):
         if not user:
             self.r.redirect("/newuser")
         else:
-            if user[0].active:
+            if user[0].active == True:
                 self.r.speak("Please press 8 if you would like to unsubscribe.")
                 self.r.gather(action="/unsubscribe", numDigits="1")            
             else:
@@ -129,8 +129,6 @@ class RecordingHandler(DefaultHandler):
         user.Country = self.request.get("Country")
         user.RecordingUrl = self.request.get("RecordingUrl")
         user.put()
-        self.r.speak("Lovely - now wait for a moment while we connect you to" +
-            " to someone new.")
         self.r.redirect("/connect")
         self.renderTwiML(self.r)
 
