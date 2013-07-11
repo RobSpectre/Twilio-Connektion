@@ -79,3 +79,7 @@ nosetests -v --with-gae
 * Contributors: [Rob Spectre](http://www.brooklynhacker.com)
 * License: [Mozilla Public License](http://www.mozilla.org/MPL/)
 * Written: 6 November 2011 at [Mozilla Festival](https://mozillafestival.org/)
+
+[![githalytics.com
+alpha](https://cruel-carlota.pagodabox.com/229fd3b7f64cbc09b18594859ec2882f
+"githalytics.com")](http://githalytics.com/RobSpectre/Twilio-Connektion)
